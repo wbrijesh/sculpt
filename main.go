@@ -10,6 +10,7 @@ import (
 )
 
 type User struct {
+	ID        uint
 	FirstName string
 	LastName  string
 	Email     string
@@ -18,6 +19,7 @@ type User struct {
 
 var UserTypeString = `
 type User struct {
+	ID        uint
 	FirstName string
 	LastName  string
 	Email     string
@@ -43,7 +45,7 @@ func WriteCrudFunctionsToFile(createFn string,
 	fileUtilities.CreateFile("update.go", "api/"+StructToString(User{}))
 	fileUtilities.CreateFile("delete.go", "api/"+StructToString(User{}))
 
-	fileUtilities.OverwriteFile("type.go", "api/"+StructToString(User{}), UserTypeString)
+	fileUtilities.OverwriteFile("type.go", "api/"+StructToString(User{}), "package "+StructToString(User{})+"\n"+UserTypeString)
 	fileUtilities.OverwriteFile("create.go", "api/"+StructToString(User{}), createFn)
 	fileUtilities.OverwriteFile("read.go", "api/"+StructToString(User{}), readFn)
 	fileUtilities.OverwriteFile("update.go", "api/"+StructToString(User{}), updateFn)
