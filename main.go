@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/wbrijesh/sculpt/databaseUtilities"
 	"github.com/wbrijesh/sculpt/fileUtilities"
 	"gorm.io/driver/sqlite"
@@ -56,8 +55,6 @@ func main() {
 
 	if err != nil {
 		log.Fatal(err)
-	} else {
-		fmt.Println("Connected to database")
 	}
 
 	WriteCrudFunctionsToFile(databaseUtilities.MigrateAndGenerateCrud(db, User{}))

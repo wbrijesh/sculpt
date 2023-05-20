@@ -1,6 +1,7 @@
 package fileUtilities
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -17,6 +18,12 @@ func OverwriteFile(fileName string, path string, content string) {
 
 	if err != nil {
 		log.Fatal(err)
+	} else {
+		if path == "" {
+			fmt.Println("Wrote to file " + fileName)
+		} else {
+			fmt.Println("Wrote to file " + path + "/" + fileName)
+		}
 	}
 
 	defer func(file *os.File) {

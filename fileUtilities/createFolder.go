@@ -1,6 +1,9 @@
 package fileUtilities
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func CreateFolder(folderName string, path string) {
 	var err error
@@ -12,5 +15,11 @@ func CreateFolder(folderName string, path string) {
 
 	if err != nil {
 		return
+	} else {
+		if path == "" {
+			fmt.Println("Created folder: " + folderName)
+		} else {
+			fmt.Println("Created folder: " + path + "/" + folderName)
+		}
 	}
 }
