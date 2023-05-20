@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	"github.com/wbrijesh/sculpt/databaseUtilities"
 	"github.com/wbrijesh/sculpt/fileUtilities"
-	"github.com/wbrijesh/sculpt/test"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -71,12 +69,12 @@ func main() {
 
 	var mode string = "test"
 
-	if mode == "test" {
+	if mode == "dev" {
 
-		fmt.Println("Running Create Function")
-		user, status := test.RunGeneratedCreateFunction(db)
-		log.Println(user)
-		log.Println(status)
+		//fmt.Println("Running Create Function")
+		//user, status := test.RunGeneratedCreateFunction(db)
+		//log.Println(user)
+		//log.Println(status)
 
 		//fmt.Println("Running Read Function")
 		//users, status := test.RunGeneratedReadFunction(db)
