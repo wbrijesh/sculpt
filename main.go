@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 	"github.com/wbrijesh/sculpt/databaseUtilities"
 	"github.com/wbrijesh/sculpt/fileUtilities"
-	"gorm.io/driver/sqlite"
+	"github.com/wbrijesh/sculpt/test"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"os"
 	"reflect"
 )
 
@@ -53,11 +58,40 @@ func WriteCrudFunctionsToFile(createFn string,
 }
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
+	db, err := gorm.Open(mysql.Open(os.Getenv("DSN")), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	WriteCrudFunctionsToFile(databaseUtilities.MigrateAndGenerateCrud(db, User{}))
+	var mode string = "test"
+
+	if mode == "test" {
+
+		fmt.Println("Running Create Function")
+		user, status := test.RunGeneratedCreateFunction(db)
+		log.Println(user)
+		log.Println(status)
+
+		//fmt.Println("Running Read Function")
+		//users, status := test.RunGeneratedReadFunction(db)
+		//log.Println(users)
+		//log.Println(status)
+
+		//fmt.Println("Running Update Function")
+		//updatedUser, status := test.RunGeneratedUpdateFunction(db)
+		//log.Println(updatedUser)
+		//log.Println(status)
+
+		//fmt.Println("Running Delete Function")
+		//status := test.RunGeneratedDeleteFunction(db)
+		//log.Println(status)
+	} else {
+		WriteCrudFunctionsToFile(databaseUtilities.MigrateAndGenerateCrud(db, User{}))
+	}
 }
