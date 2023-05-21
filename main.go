@@ -1,15 +1,12 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"github.com/wbrijesh/sculpt/databaseUtilities"
-	"github.com/wbrijesh/sculpt/fileUtilities"
+	"github.com/wbrijesh/sculpt/util"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
 	"os"
-	"reflect"
 )
 
 type User struct {
@@ -30,29 +27,27 @@ type User struct {
 }
 `
 
-func StructToString(object interface{}) string {
-	return reflect.TypeOf(object).Name()
-}
-
-func WriteCrudFunctionsToFile(createFn string,
+func WriteCrudFunctionsToFile(
+	createFn string,
 	readFn string,
 	updateFn string,
-	deleteFn string) {
+	deleteFn string,
+) {
+	util.HandleError(util.CreateFolder("api", ""))
+	util.HandleError(util.CreateFolder(util.StructToString(User{}), "api"))
 
-	fileUtilities.CreateFolder("api", "")
-	fileUtilities.CreateFolder(StructToString(User{}), "api")
+	util.HandleError(util.CreateFile("type.go", "api/"+util.StructToString(User{})))
+	util.HandleError(util.CreateFile("create.go", "api/"+util.StructToString(User{})))
 
-	fileUtilities.CreateFile("type.go", "api/"+StructToString(User{}))
-	fileUtilities.CreateFile("create.go", "api/"+StructToString(User{}))
-	fileUtilities.CreateFile("read.go", "api/"+StructToString(User{}))
-	fileUtilities.CreateFile("update.go", "api/"+StructToString(User{}))
-	fileUtilities.CreateFile("delete.go", "api/"+StructToString(User{}))
+	util.HandleError(util.CreateFile("read.go", "api/"+util.StructToString(User{})))
+	util.HandleError(util.CreateFile("update.go", "api/"+util.StructToString(User{})))
+	util.HandleError(util.CreateFile("delete.go", "api/"+util.StructToString(User{})))
 
-	fileUtilities.OverwriteFile("type.go", "api/"+StructToString(User{}), "package "+StructToString(User{})+"\n"+UserTypeString)
-	fileUtilities.OverwriteFile("create.go", "api/"+StructToString(User{}), createFn)
-	fileUtilities.OverwriteFile("read.go", "api/"+StructToString(User{}), readFn)
-	fileUtilities.OverwriteFile("update.go", "api/"+StructToString(User{}), updateFn)
-	fileUtilities.OverwriteFile("delete.go", "api/"+StructToString(User{}), deleteFn)
+	util.HandleError(util.OverwriteFile("type.go", "api/"+util.StructToString(User{}), "package "+util.StructToString(User{})+"\n"+UserTypeString))
+	util.HandleError(util.OverwriteFile("create.go", "api/"+util.StructToString(User{}), createFn))
+	util.HandleError(util.OverwriteFile("read.go", "api/"+util.StructToString(User{}), readFn))
+	util.HandleError(util.OverwriteFile("update.go", "api/"+util.StructToString(User{}), updateFn))
+	util.HandleError(util.OverwriteFile("delete.go", "api/"+util.StructToString(User{}), deleteFn))
 }
 
 func main() {
@@ -90,6 +85,6 @@ func main() {
 		//status := test.RunGeneratedDeleteFunction(db)
 		//log.Println(status)
 	} else {
-		WriteCrudFunctionsToFile(databaseUtilities.MigrateAndGenerateCrud(db, User{}))
+		WriteCrudFunctionsToFile(util.MigrateAndGenerateCrud(db, User{}))
 	}
 }

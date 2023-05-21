@@ -1,4 +1,4 @@
-package fileUtilities
+package util
 
 import (
 	"fmt"
@@ -6,9 +6,8 @@ import (
 	"os"
 )
 
-func CreateFile(fileName string, path string) {
+func CreateFile(fileName string, path string) (err error) {
 	var file *os.File
-	var err error
 
 	if path == "" {
 		file, err = os.Create(fileName)
@@ -17,7 +16,7 @@ func CreateFile(fileName string, path string) {
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	} else {
 		if path == "" {
 			fmt.Println("Created file " + fileName)
@@ -32,4 +31,6 @@ func CreateFile(fileName string, path string) {
 			log.Fatal(err)
 		}
 	}(file)
+
+	return nil
 }

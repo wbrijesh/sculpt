@@ -1,13 +1,9 @@
-package functionGenerationUtilities
+package util
 
 import (
 	"errors"
 	"reflect"
 )
-
-func StructToString(object interface{}) string {
-	return reflect.TypeOf(object).Name()
-}
 
 func GenerateFunction(object interface{}, action string) (string, error) {
 	if reflect.TypeOf(object).Kind() != reflect.Struct {

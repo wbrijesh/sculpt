@@ -1,14 +1,12 @@
-package fileUtilities
+package util
 
 import (
 	"fmt"
-	"log"
 	"os"
 )
 
-func OverwriteFile(fileName string, path string, content string) {
+func OverwriteFile(fileName string, path string, content string) (err error) {
 	var file *os.File
-	var err error
 
 	if path == "" {
 		file, err = os.OpenFile(fileName, os.O_RDWR, 0644)
@@ -17,7 +15,7 @@ func OverwriteFile(fileName string, path string, content string) {
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	} else {
 		if path == "" {
 			fmt.Println("Wrote to file " + fileName)
@@ -29,13 +27,15 @@ func OverwriteFile(fileName string, path string, content string) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			panic(err)
 		}
 	}(file)
 
 	_, err = file.WriteString(content)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }

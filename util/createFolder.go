@@ -1,12 +1,11 @@
-package fileUtilities
+package util
 
 import (
 	"fmt"
 	"os"
 )
 
-func CreateFolder(folderName string, path string) {
-	var err error
+func CreateFolder(folderName string, path string) (err error) {
 	if path == "" {
 		err = os.Mkdir(folderName, 0755)
 	} else {
@@ -14,7 +13,7 @@ func CreateFolder(folderName string, path string) {
 	}
 
 	if err != nil {
-		return
+		return err
 	} else {
 		if path == "" {
 			fmt.Println("Created folder: " + folderName)
@@ -22,4 +21,6 @@ func CreateFolder(folderName string, path string) {
 			fmt.Println("Created folder: " + path + "/" + folderName)
 		}
 	}
+
+	return nil
 }
